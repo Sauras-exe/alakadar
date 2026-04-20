@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALAKADAR - Photo Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="grid-bg"></div>
+    <div class="gradient-overlay"></div>
+    <canvas id="particles"></canvas>
+
+    <!-- Back Navigation -->
+    <a href="index.html" class="nav-back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Kembali</span>
+    </a>
+
+    <!-- Main Content -->
+    <main class="page-wrapper">
+        <div class="page-content">
+            <!-- Page Title -->
+            <div class="page-title">
+                <h1 class="font-display fade-in stagger-1">Photo Gallery</h1>
+                <p class="fade-in stagger-2">Koleksi foto alam dan perkotaan dari komunitas Alakadar</p>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-grid fade-in stagger-3" id="galleryGrid">
+                <!-- Photos will be loaded here by JavaScript -->
+            </div>
+
+            <!-- Loading message -->
+            <div id="loadingMessage" style="text-align: center; color: var(--muted); margin-top: 2rem;">
+                Loading photos...
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer fade-in stagger-5">
+                <p>ALAKADAR.MY.ID</p>
+            </footer>
+        </div>
+    </main>
+
+    <!-- Photo Modal -->
+    <div id="photoModal" class="photo-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePhotoModal()">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="modal-image-wrapper">
+                <img id="modalImage" src="" alt="Photo" class="modal-image">
+            </div>
+
+            <div class="modal-info">
+                <div class="modal-text-content">
+                    <div>
+                        <div class="modal-label">Lokasi</div>
+                        <div class="modal-location" id="modalLocation">-</div>
+                    </div>
+                    <div>
+                        <div class="modal-label">Fotografer</div>
+                        <div class="modal-photographer" id="modalPhotographer">-</div>
+                    </div>
+                </div>
+                <a id="modalDownloadBtn" href="#" download class="btn btn-primary" style="margin-top: 1rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="gallery-config.js"></script>
+    <script src="gallery.js"></script>
+</body>
+</html>
