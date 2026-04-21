@@ -14,6 +14,55 @@
  */
 
 const GALLERY_PHOTOS = [
+    {
+      id: 1,
+      title: "B.A.W",
+      photographer: "B.A.W",
+      location: "",
+      imagePath: "images/gallery/1.jpeg",
+      downloadUrl: "images/gallery/1.jpeg",
+      category: "nature"
+ },
+
+ {
+      id: 5,
+      title: "B.A.W",
+      photographer: "B.A.W",
+      location: "",
+      imagePath: "images/gallery/5.jpeg",
+      downloadUrl: "images/gallery/5.jpeg",
+      category: "nature"
+ },
+
+ {
+      id: 2,
+      title: "B.A.W",
+      photographer: "B.A.W",
+      location: "",
+      imagePath: "images/gallery/2.jpeg",
+      downloadUrl: "images/gallery/2.jpeg",
+      category: "nature"
+ },
+
+ {
+      id: 3,
+      title: "B.A.W",
+      photographer: "B.A.W",
+      location: "",
+      imagePath: "images/gallery/3.jpeg",
+      downloadUrl: "images/gallery/3.jpeg",
+      category: "nature"
+ },
+
+{
+      id: 4,
+      title: "B.A.W",
+      photographer: "B.A.W",
+      location: "",
+      imagePath: "images/gallery/4.jpeg",
+      downloadUrl: "images/gallery/4.jpeg",
+      category: "nature"
+ },
    
 ];
 

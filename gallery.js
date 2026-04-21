@@ -4,6 +4,7 @@
  */
 
 let currentPhotoIndex = 0;
+let currentOptionsIndex = 0;   // ← baru
 
 // Initialize gallery ketika page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -23,33 +24,58 @@ function renderGallery() {
         return;
     }
 
-    // Clear loading message
     loadingMessage.style.display = 'none';
 
-    // Generate HTML untuk setiap foto
+    // CARD BARU: gambar + bottom hitam
     galleryGrid.innerHTML = GALLERY_PHOTOS.map((photo, index) => `
-        <div class="photo-card fade-in" style="animation-delay: ${index * 0.1}s" onclick="openPhotoModal(${index})">
-            <div class="photo-card-image-wrapper">
-                <img src="${photo.imagePath}" alt="${photo.title}" class="photo-card-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-size=%2220%22%3EImage not found%3C/text%3E%3C/svg%3E'">
-            </div>
-            <div class="photo-card-overlay">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-            </div>
-            <div class="photo-card-info">
-                <div class="photo-card-photographer">${photo.photographer}</div>
-                <div class="photo-card-location">${photo.location}</div>
+        <div class="photo-card fade-in" style="animation-delay: ${index * 0.1}s" onclick="showOptionsMenu(${index})">
+            <div class="photo-card-image-wrapper relative">
+                <img src="${photo.imagePath}" 
+                     alt="${photo.title}" 
+                     class="photo-card-image"
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-size=%2220%22%3EImage not found%3C/text%3E%3C/svg%3E'">
+                
+                <!-- Bagian bawah hitam -->
+                <div class="photo-card-info absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm px-4 py-4 text-white">
+                    <div class="photo-card-photographer text-sm font-medium">${photo.photographer}</div>
+                    <div class="photo-card-location text-xs opacity-90 mt-0.5">${photo.location}</div>
+                </div>
             </div>
         </div>
     `).join('');
 }
 
-/**
- * Buka modal foto
- */
+/* ================== OPTIONS MENU ================== */
+function showOptionsMenu(index) {
+    currentOptionsIndex = index;
+    const menu = document.getElementById('optionsMenu');
+    menu.classList.remove('hidden');
+}
+
+function hideOptionsMenu() {
+    const menu = document.getElementById('optionsMenu');
+    menu.classList.add('hidden');
+}
+
+function selectOption(action) {
+    hideOptionsMenu();
+    const photo = GALLERY_PHOTOS[currentOptionsIndex];
+    if (!photo) return;
+
+    if (action === 'view') {
+        openPhotoModal(currentOptionsIndex);
+    } 
+    else if (action === 'download') {
+        const link = document.createElement('a');
+        link.href = photo.downloadUrl;
+        link.download = `${photo.title.replace(/\s+/g, '-').toLowerCase()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+/* ================== FUNGSI MODAL (tetap sama) ================== */
 function openPhotoModal(index) {
     const photo = GALLERY_PHOTOS[index];
     currentPhotoIndex = index;
@@ -62,51 +88,37 @@ function openPhotoModal(index) {
     const modalPhotographer = document.getElementById('modalPhotographer');
     const modalDownloadBtn = document.getElementById('modalDownloadBtn');
 
-    // Set modal content
     modalImage.src = photo.imagePath;
     modalImage.alt = photo.title;
     modalLocation.textContent = photo.location;
     modalPhotographer.textContent = photo.photographer;
     
-    // Set download button
     modalDownloadBtn.href = photo.downloadUrl;
     modalDownloadBtn.download = `${photo.title.replace(/\s+/g, '-').toLowerCase()}.jpg`;
 
-    // Show modal
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
-/**
- * Close modal foto
- */
 function closePhotoModal() {
     const modal = document.getElementById('photoModal');
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
 }
 
-/**
- * Navigate photo di modal (next)
- */
 function nextPhoto() {
     if (currentPhotoIndex < GALLERY_PHOTOS.length - 1) {
         openPhotoModal(currentPhotoIndex + 1);
     }
 }
 
-/**
- * Navigate photo di modal (previous)
- */
 function previousPhoto() {
     if (currentPhotoIndex > 0) {
         openPhotoModal(currentPhotoIndex - 1);
     }
 }
 
-/**
- * Close modal ketika click di luar area modal
- */
+/* Close modal & keyboard navigation (tetap sama) */
 document.addEventListener('click', function(event) {
     const modal = document.getElementById('photoModal');
     const modalContent = document.querySelector('.modal-content');
@@ -116,20 +128,15 @@ document.addEventListener('click', function(event) {
     }
 });
 
-/**
- * Close modal dengan keyboard ESC
- */
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
-        closePhotoModal();
+        const modal = document.getElementById('photoModal');
+        if (modal.classList.contains('active')) closePhotoModal();
+        else hideOptionsMenu();
     }
     
-    // Navigate dengan arrow keys
     if (document.getElementById('photoModal').classList.contains('active')) {
-        if (event.key === 'ArrowRight') {
-            nextPhoto();
-        } else if (event.key === 'ArrowLeft') {
-            previousPhoto();
-        }
+        if (event.key === 'ArrowRight') nextPhoto();
+        else if (event.key === 'ArrowLeft') previousPhoto();
     }
 });
